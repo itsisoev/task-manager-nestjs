@@ -5,7 +5,7 @@ import { ApolloDriverConfig } from '@nestjs/apollo';
 import { graphqlConfig } from './config/graphql.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database.config';
-import { AppResolver } from './app.resolver';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,8 +19,9 @@ import { AppResolver } from './app.resolver';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => databaseConfig(config),
     }),
+    UsersModule,
   ],
   controllers: [],
-  providers: [AppResolver],
+  providers: [],
 })
 export class AppModule {}
