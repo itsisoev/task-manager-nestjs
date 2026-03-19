@@ -6,6 +6,8 @@ import { graphqlConfig } from './config/graphql.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './config/database.config';
 import { UsersModule } from './users/users.module';
+import { ProjectsModule } from './projects/projects.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { UsersModule } from './users/users.module';
       useFactory: (config: ConfigService) => databaseConfig(config),
     }),
     UsersModule,
+    ProjectsModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [],
