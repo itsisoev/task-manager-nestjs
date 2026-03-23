@@ -112,7 +112,7 @@ http://localhost:3000/graphql
 ```graphql
 query {
   users {
-    id
+    uuid
     username
     email
     fullName
