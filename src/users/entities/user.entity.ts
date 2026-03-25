@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ProjectEntity } from '../../projects/entities/project.entity';
+import { TaskEntity } from '../../tasks/entities/task.entity';
 
 @Entity('users')
 export class UserEntity {
@@ -22,6 +25,12 @@ export class UserEntity {
 
   @Column()
   password: string;
+
+  @OneToMany(() => ProjectEntity, (project) => project.owner)
+  projects: ProjectEntity[];
+
+  @OneToMany(() => TaskEntity, (task) => task.assignee)
+  assignedTasks: TaskEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
