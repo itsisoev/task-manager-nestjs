@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ProjectEntity } from '../../projects/entities/project.entity';
+import { UserEntity } from '../../users/entities/user.entity';
 
 export enum TaskStatus {
   TODO = 'TODO',
@@ -29,6 +32,17 @@ export class TaskEntity {
     default: TaskStatus.TODO,
   })
   status: TaskStatus;
+
+  @ManyToOne(() => ProjectEntity, (project) => project.tasks, {
+    onDelete: 'CASCADE',
+  })
+  project: ProjectEntity;
+
+  @ManyToOne(() => UserEntity, (user) => user.assignedTasks, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  assignee: UserEntity;
 
   @CreateDateColumn()
   createdAt: Date;
