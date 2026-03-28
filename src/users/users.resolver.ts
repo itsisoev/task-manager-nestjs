@@ -1,32 +1,38 @@
-import { Args, ID, Query, Resolver } from '@nestjs/graphql';
+import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UsersService } from './users.service';
 import { User } from './models/user.model';
-import { v4 as uuidv4 } from 'uuid';
+import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto/update-user.input';
 
 @Resolver()
 export class UsersResolver {
-  private readonly users: User[] = [
-    {
-      uuid: uuidv4(),
-      username: 'john_doe',
-      email: 'john@example.com',
-      fullName: 'John Doe',
-      createdAt: new Date(),
-    },
-    {
-      uuid: uuidv4(),
-      username: 'jane_doe',
-      email: 'jane@example.com',
-      createdAt: new Date(),
-    },
-  ];
+  constructor(private readonly usersService: UsersService) {}
 
   @Query(() => [User], { name: 'users' })
-  findAll(): User[] {
-    return this.users;
+  findAllUsers(): Promise<User[]> {
+    return this.usersService.findAllUsers();
   }
 
   @Query(() => User, { name: 'user', nullable: true })
-  findOne(@Args('uuid', { type: () => ID }) uuid: string): User | null {
-    return this.users.find((u) => u.uuid === uuid) ?? null;
+  findOne(@Args('uuid', { type: () => ID }) uuid: string): Promise<User> {
+    return this.usersService.findOneUser(uuid);
+  }
+
+  @Mutation(() => User)
+  createUser(@Args('input') input: CreateUserInput): Promise<User> {
+    return this.usersService.createUser(input);
+  }
+
+  @Mutation(() => User)
+  updateUser(
+    @Args('uuid', { type: () => ID }) uuid: string,
+    @Args('input') input: UpdateUserInput,
+  ): Promise<User> {
+    return this.usersService.updateUser(uuid, input);
+  }
+
+  @Mutation(() => Boolean)
+  deleteUser(@Args('uuid', { type: () => ID }) uuid: string): Promise<boolean> {
+    return this.usersService.delete(uuid);
   }
 }
