@@ -2,6 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateProjectInput {
+  description: String
+  name: String!
+  ownerId: ID!
+}
+
 input CreateUserInput {
   email: String!
   fullName: String
@@ -15,14 +21,34 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Mutation {
+  createProject(input: CreateProjectInput!): Project!
   createUser(input: CreateUserInput!): User!
+  deleteProject(uuid: ID!): Boolean!
   deleteUser(uuid: ID!): Boolean!
+  updateProject(input: UpdateProjectInput!, uuid: ID!): Project!
   updateUser(input: UpdateUserInput!, uuid: ID!): User!
 }
 
+type Project {
+  createdAt: DateTime!
+  description: String
+  name: String!
+  owner: User
+  updatedAt: DateTime!
+  uuid: ID!
+}
+
 type Query {
+  project(uuid: ID!): Project
+  projects: [Project!]!
   user(uuid: ID!): User
   users: [User!]!
+}
+
+input UpdateProjectInput {
+  description: String
+  name: String
+  ownerId: ID
 }
 
 input UpdateUserInput {
